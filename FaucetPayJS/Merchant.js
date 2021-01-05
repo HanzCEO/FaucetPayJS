@@ -1,12 +1,4 @@
 const axios = require('axios')
-const fp = axios.create({
-	baseURL: 'https://faucetpay.io/merchant/',
-	timeout: 2000,
-	method: 'POST',
-	headers: {
-		'X-FaucetPayJS': 'v0.1.0'
-	}
-})
 
 async function createInvoice(
 	item_description,
@@ -18,19 +10,45 @@ async function createInvoice(
 	success_url='http://merchant.hanzhaxors.online/thank-you',
 	cancel_url='http://merchant.hanzhaxors.online/feedback'
 ) {
-	axios.post('/webscr', {
+	try {
+		let response = await axios.post('/webscr', qs.stringify({
+			merchant_username: this.merchant_username,
+			item_description: item_description,
+			amount1: price,
+			currency1: receive_as,
+			currency2: pay_with,
+			custom: order_id,
+			callback_url: callback_url,
+			success_url: success_url,
+			cancel_url: cancel_url
+		}), this.axios_config)
 
-	})
+		return response.data
+	} catch (e) {
+		console.error(e)
+		new Error(e);
+	}
 }
 
 async function validateToken(token) {
-	let response = await axios.get(`/validate-token${token}`)
-	return response.valid
+	let response = await axios.get(`/validate-token${token}`, this.axios_config)
+	return response.data.valid
 }
 
 class Merchant {
 	constructor(merchant_username) {
 		this.merchant_username = merchant_username
+		this.fp = axios.create({
+			baseURL: 'https://faucetpay.io/merchant/',
+			method: 'POST',
+			headers: {
+				'X-FaucetPayJS': 'v0.1.0',
+				'User-Agent': 'FaucetPayJS/0.1.0'
+			}
+		})
+		this.axios_config = {
+			timeout: 0
+		}
 	}
 }
 
