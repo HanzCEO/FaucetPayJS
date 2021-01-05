@@ -1,0 +1,31 @@
+{
+  "name": "faucetpayjs",
+  "version": "0.1.0",
+  "description": "NodeJS Based API collection of FaucetPay.io",
+  "main": "FaucetPayJS/index.js",
+  "scripts": {
+    "test": "node  test/testAll.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HanzHaxors/FaucetPayJS.git"
+  },
+  "keywords": [
+    "faucetpay",
+    "crypto",
+    "currency",
+    "cryptocurrency",
+    "api",
+    "endpoint",
+    "bitcoin"
+  ],
+  "author": "HanzHaxors",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HanzHaxors/FaucetPayJS/issues"
+  },
+  "homepage": "https://github.com/HanzHaxors/FaucetPayJS#readme",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
