@@ -31,7 +31,7 @@ async function createInvoice(
 }
 
 async function validateToken(token) {
-	let response = await axios.get(`/validate-token${token}`, this.axios_config)
+	let response = await axios.get(`/validate-token/${token}`, this.axios_config)
 	return response.data.valid
 }
 
