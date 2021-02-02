@@ -40,7 +40,7 @@ async function createInvoice(
 }
 
 async function validateToken(token) {
-	let response = await axios.get(`/get-payment/${token}`, this.axios_config)
+	let response = await axios.get(`https://faucetpay.io/merchant/get-payment/${token}`, this.axios_config)
 	return response.data
 }
 
