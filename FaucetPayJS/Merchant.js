@@ -96,4 +96,4 @@ Merchant.prototype.isTokenValid = validateToken
 
 Merchant.prototype.getMiddleware = getMiddleware
 
-modules.exports = Merchant
+module.exports = Merchant
