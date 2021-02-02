@@ -1,11 +1,20 @@
 const axios = require('axios')
 
+/*
+ * This greedy function doesnt work
+ * because this just simply redirects
+ * costumer to faucetpay's page which
+ * we didn't handle, right?
+ *
+ * Just forget about this function,
+ * let's create middlewares instead
+ */
 async function createInvoice(
 	item_description,
 	price,
 	receive_as,
 	pay_with='',
-	order_id=-1,
+	custom="",
 	callback_url='http://0.0.0.0',
 	success_url='http://merchant.hanzhaxors.online/thank-you',
 	cancel_url='http://merchant.hanzhaxors.online/feedback'
@@ -13,26 +22,50 @@ async function createInvoice(
 	try {
 		let response = await axios.post('/webscr', qs.stringify({
 			merchant_username: this.merchant_username,
-			item_description: item_description,
-			amount1: price,
-			currency1: receive_as,
-			currency2: pay_with,
-			custom: order_id,
-			callback_url: callback_url,
-			success_url: success_url,
-			cancel_url: cancel_url
+			item_description: String(item_description),
+			amount1: +price,
+			currency1: receive_as.toUpperCase(),
+			currency2: pay_with.toUpperCase(),
+			custom: String(custom),
+			callback_url: String(callback_url),
+			success_url: String(success_url),
+			cancel_url: String(cancel_url)
 		}), this.axios_config)
 
 		return response.data
 	} catch (e) {
 		console.error(e)
-		new Error(e);
+		throw e
 	}
 }
 
 async function validateToken(token) {
-	let response = await axios.get(`/validate-token/${token}`, this.axios_config)
+	let response = await axios.get(`/get-payment/${token}`, this.axios_config)
 	return response.data.valid
+}
+
+/*
+ * getMiddleware function returns a middleware
+ * suitable for http, https, Express.js, connect,
+ * and much more framework.
+ *
+ * Please do note, if you want to retrieve the
+ * token validity use `req.tokenValid` (Boolean)
+ */
+function getMiddleware(config={}) {
+	let retfun = async (req, res, next) => {
+		if (!req.body || !req.body.token || !req.body.merchant_username) {
+			return next()
+		}
+
+		let tru = (await validateToken(req.body.token)) &&
+			  req.body.merchant_username == this.merchant_username
+
+		req.tokenValid = tru
+		next()
+	}
+
+	return retfun
 }
 
 class Merchant {
@@ -42,8 +75,8 @@ class Merchant {
 			baseURL: 'https://faucetpay.io/merchant/',
 			method: 'POST',
 			headers: {
-				'X-FaucetPayJS': 'v0.1.0',
-				'User-Agent': 'FaucetPayJS/0.1.0'
+				'X-FaucetPayJS': 'v0.2.0',
+				'User-Agent': 'FaucetPayJS/0.2.0'
 			}
 		})
 		this.axios_config = {
@@ -60,3 +93,7 @@ Merchant.prototype.requestInvoice = createInvoice
 Merchant.prototype.validateToken = validateToken
 Merchant.prototype.checkToken = validateToken
 Merchant.prototype.isTokenValid = validateToken
+
+Merchant.prototype.getMiddleware = getMiddleware
+
+modules.exports = Merchant
