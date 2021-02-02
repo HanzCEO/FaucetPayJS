@@ -58,7 +58,7 @@ function getMiddleware(config={}) {
 			return next()
 		}
 
-		req.paymentData = validateToken(req.body.token)
+		req.paymentData = await validateToken(req.body.token)
 		next()
 	}
 
