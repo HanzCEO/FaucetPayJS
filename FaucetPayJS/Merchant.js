@@ -41,7 +41,7 @@ async function createInvoice(
 
 async function validateToken(token) {
 	let response = await axios.get(`/get-payment/${token}`, this.axios_config)
-	return response.data.valid
+	return response.data
 }
 
 /*
@@ -54,14 +54,11 @@ async function validateToken(token) {
  */
 function getMiddleware(config={}) {
 	let retfun = async (req, res, next) => {
-		if (!req.body || !req.body.token || !req.body.merchant_username) {
+		if (!req.body || !req.body.token) {
 			return next()
 		}
 
-		let tru = (await validateToken(req.body.token)) &&
-			  req.body.merchant_username == this.merchant_username
-
-		req.tokenValid = tru
+		req.paymentData = validateToken(req.body.token)
 		next()
 	}
 
