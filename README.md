@@ -2,17 +2,17 @@
 NodeJS Based API collection of FaucetPay.io<br/>
 <br/>
 
-# Installation
+## Installation
 `npm i --save faucetpayjs`
 
-# API Endpoints
+## API Endpoints
 How to start<br/>
 ```javascript
 const { API } = require('FaucetPayJS');
 const myAPI = new API(process.env.API_KEY);
 myAPI.getBalance().then(data => {
 	console.dir(data)
-})
+});
 ```
 Response
 ```javascript
@@ -70,15 +70,7 @@ Aliases<br/>
 `API.retrieveFaucets`<br/>
 `API.fetchRotator`<br/>
 
-# Contributing
-1. I use `'` instead of `"` for string or character
-2. No semicolons, sorry.
-3. No trailing space (ex. `a = 1 + 1                 `)
-4. Add space before and after curly-braces (except if its making trailing spaces)
-5. Minimum line changed is 2
-6. DO NOT CHANGE THE BRAND, that's stupid.
-
-# End Notes
+## End Notes
 Thank you for visiting this page! Appreciate my works by Following, being a Stargazer, Contribute to the project or Donate me via cryptocurrency down below<br/>
 <br/>
 BTC, ETH, LTC, BCH, DASH, DGB, FEY via FaucetPay (username: `Hanz`)<br/>
